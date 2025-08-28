@@ -1,0 +1,20 @@
+flowchart LR
+  subgraph VPC["VPC (10.0.0.0/16)"]
+    subgraph Public["Public Subnets"]
+      IGW[Internet Gateway]
+      ALB1[Internet-Facing ALB]
+      NAT[NAT Gateway]
+    end
+    subgraph PrivateApp["Private App Subnets"]
+      ALB2[Internal ALB]
+      ASG[EC2 Auto Scaling Group: Web/App]
+    end
+    subgraph PrivateDB["Private DB Subnets"]
+      RDS[(Amazon RDS/Aurora)]
+    end
+  end
+
+  User((User)) -->|HTTPS| ALB1 -->|HTTP 80 / HTTPS 443| ALB2 -->|TCP 4000/HTTP| ASG
+  ASG -->|SQL 3306| RDS
+  NAT -->|Outbound| ASG
+  ALB1 --- IGW
