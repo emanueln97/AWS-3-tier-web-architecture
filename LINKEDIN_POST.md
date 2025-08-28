@@ -13,7 +13,7 @@ What I learned:
 • Hardening access between tiers (only what’s needed, nothing more)
 • Validating DB connectivity from app tier only
 
-Repo (screens, diagram, and notes): 🔗 (add GitHub link)
+Repo (screens, diagram, and notes): 🔗 (https://github.com/kaldurjoy/AWS-3-tier-web-achitecture/tree/main)
 If you’re exploring AWS architecture or hiring for cloud roles, I’d love your feedback and suggestions!
 
 #AWS #Cloud #SolutionsArchitect #DevOps #Architecture #VPC #ALB #RDS #EC2 #IaC
